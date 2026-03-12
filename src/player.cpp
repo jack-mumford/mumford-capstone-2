@@ -20,6 +20,7 @@ void player_update(Player& player) {
     float dt = GetFrameTime();
     float speed = MOVE_SPEED * dt;
 
+    // Horizontal movement
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))    player.position.z -= speed;
     if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))   player.position.z += speed;
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))   player.position.x -= speed;
@@ -29,10 +30,20 @@ void player_update(Player& player) {
     player.position.x = std::clamp(player.position.x, BOUNDARY_MIN, BOUNDARY_MAX);
     player.position.z = std::clamp(player.position.z, BOUNDARY_MIN, BOUNDARY_MAX);
 
-    // Snap to ground if below it
+    // Jump (only when grounded)
+    if (IsKeyPressed(KEY_SPACE) && player.is_grounded) {
+        player.velocity.y  = JUMP_VELOCITY;
+        player.is_grounded = false;
+    }
+
+    // Apply gravity and vertical velocity
+    player.velocity.y  += GRAVITY * dt;
+    player.position.y  += player.velocity.y * dt;
+
+    // Ground floor clamp
     if (player.position.y < GROUND_Y) {
-        player.position.y = GROUND_Y;
-        player.velocity.y = 0.0f;
+        player.position.y  = GROUND_Y;
+        player.velocity.y  = 0.0f;
         player.is_grounded = true;
     }
 }

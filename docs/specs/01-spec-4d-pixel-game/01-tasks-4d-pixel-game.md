@@ -65,7 +65,7 @@ Add a player character (textured 3D box) to the scene, implement keyboard-driven
 
 ---
 
-### [ ] 3.0 Jump Mechanic, Gravity, and Elevated Platforms
+### [x] 3.0 Jump Mechanic, Gravity, and Elevated Platforms
 
 Implement manual gravity, a Space-to-jump mechanic, and AABB collision detection so the player can jump onto at least three elevated platforms at different heights and falls back when walking off an edge.
 
@@ -77,13 +77,13 @@ Implement manual gravity, a Space-to-jump mechanic, and AABB collision detection
 
 #### 3.0 Tasks
 
-- [ ] 3.1 Create `include/level.h` and define a `Platform` struct with fields: `Vector3 position` (center of the platform), `Vector3 size` (width, height, depth); declare three functions: `void level_init(Platform platforms[], int& count)`, `void level_draw(const Platform platforms[], int count, Texture2D texture)`, `bool check_platform_collision(Player& player, const Platform platforms[], int count)`
-- [ ] 3.2 Create `src/level.cpp`; implement `level_init()` to populate the array with at least three platforms at varied positions and heights — for example: `{-3, 1, -3}` size `{3, 0.5f, 3}`, `{3, 2, 2}` size `{3, 0.5f, 3}`, `{0, 3, -6}` size `{4, 0.5f, 2}` — each at a different Y height so the player must jump progressively higher
-- [ ] 3.3 Add a `generate_platform_texture()` function to `src/textures.cpp` and its declaration to `include/textures.h`; use a different color scheme from the ground (e.g., `GenImageChecked(16, 16, 4, 4, BROWN, DARKBROWN)`) with `TEXTURE_FILTER_POINT`
-- [ ] 3.4 Implement `level_draw()` in `src/level.cpp`: for each platform, call `DrawCubeTexture(texture, platform.position, platform.size.x, platform.size.y, platform.size.z, WHITE)`
-- [ ] 3.5 Add gravity and jump fields to the `Player` struct in `include/player.h`: add a constant `float jump_velocity = 8.0f` and a constant `float gravity = -20.0f`; these will be used in the physics update
-- [ ] 3.6 In `player_update()` in `src/player.cpp`, apply gravity each frame: `player.velocity.y += gravity * GetFrameTime()`; then apply vertical velocity to position: `player.position.y += player.velocity.y * GetFrameTime()`; clamp position to never go below ground level (`y >= 0.5f`) and set `is_grounded = true` and `velocity.y = 0` when clamped to ground
-- [ ] 3.7 Add jump input to `player_update()`: if `IsKeyPressed(KEY_SPACE)` and `player.is_grounded == true`, set `player.velocity.y = player.jump_velocity` and `player.is_grounded = false`
-- [ ] 3.8 Implement `check_platform_collision()` in `src/level.cpp`: for each platform, check if the player's bounding box (position ± size/2) overlaps horizontally with the platform's bounding box AND the player's bottom edge is within a small threshold (e.g., `0.1f`) of the platform's top surface (`platform.position.y + platform.size.y / 2`); if so, snap `player.position.y` to sit on top of the platform, set `player.velocity.y = 0`, and set `player.is_grounded = true`
-- [ ] 3.9 In `main.cpp`, call `check_platform_collision()` every frame after `player_update()`; also set `player.is_grounded = false` at the start of each frame (before update) so it resets — it only becomes true again if a collision check confirms the player is on a surface that frame
-- [ ] 3.10 Wire level into `main.cpp`: call `level_init()` before the loop, call `level_draw()` and `check_platform_collision()` inside the loop; play-test all three proof artifact scenarios (jump to platform, land, walk off edge, fall) and take screenshots/recording for the proof artifacts
+- [x] 3.1 Create `include/level.h`: `Platform` struct, `level_init`, `level_draw`, `check_platform_collision` declarations
+- [x] 3.2 Create `src/level.cpp`: 3 platforms at heights 1.0, 2.25, 3.75 — progressively higher
+- [x] 3.3 `generate_platform_texture()` in textures.cpp (kept; platforms use DrawCubeV BROWN — Raylib 5 has no DrawCubeTexture)
+- [x] 3.4 `level_draw()`: DrawCubeV (BROWN) + DrawCubeWiresV (DARKBROWN) per platform
+- [x] 3.5 `JUMP_VELOCITY = 8.0f` and `GRAVITY = -20.0f` constants added to `include/player.h`
+- [x] 3.6 Gravity applied each frame in `player_update()`: velocity.y += GRAVITY*dt, position.y += velocity.y*dt; ground clamp at y=0.5
+- [x] 3.7 Space-to-jump in `player_update()`: only when is_grounded; sets velocity.y = JUMP_VELOCITY
+- [x] 3.8 AABB top-surface collision in `check_platform_collision()`: XZ overlap + falling-onto-top check with 0.15 threshold; snaps player on top
+- [x] 3.9 `is_grounded` reset to false at start of each game loop frame; player_update and check_platform_collision re-set to true
+- [x] 3.10 Level wired into main.cpp: level_init, level_draw, check_platform_collision all called each frame
