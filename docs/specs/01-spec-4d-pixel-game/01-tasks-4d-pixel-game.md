@@ -43,7 +43,7 @@ Set up the entire project structure from scratch: directory layout, Makefile, Ra
 
 ---
 
-### [ ] 2.0 Player Character Rendering and Movement
+### [x] 2.0 Player Character Rendering and Movement
 
 Add a player character (textured 3D box) to the scene, implement keyboard-driven movement on the ground plane, boundary clamping so the player can't leave the level, and camera follow so the player stays centered on screen.
 
@@ -54,14 +54,14 @@ Add a player character (textured 3D box) to the scene, implement keyboard-driven
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Create `include/player.h` and define a `Player` struct with fields: `Vector3 position`, `Vector3 velocity`, `Vector3 size`, `bool is_grounded`; also declare three functions: `Player player_init()`, `void player_update(Player& player)`, `void player_draw(const Player& player, Texture2D texture)`
-- [ ] 2.2 Create `src/player.cpp`; implement `player_init()` to return a `Player` with position `{0, 0.5f, 0}` (half-height above ground), size `{0.8f, 1.0f, 0.8f}`, zero velocity, and `is_grounded = false`
-- [ ] 2.3 Add a function `generate_player_texture()` to `src/textures.cpp` and its declaration to `include/textures.h`; generate a 16x16 image with a simple face/block pattern using `ImageDrawPixel` calls (e.g., solid blue body with two white pixel eyes) and return the `Texture2D` with `TEXTURE_FILTER_POINT`
-- [ ] 2.4 Implement `player_draw()` in `src/player.cpp` to call `DrawCubeTexture(texture, player.position, player.size.x, player.size.y, player.size.z, WHITE)`
-- [ ] 2.5 Implement keyboard input in `player_update()`: read `IsKeyDown(KEY_W)` / `KEY_S` for Z-axis movement and `IsKeyDown(KEY_A)` / `KEY_D` for X-axis movement; apply a movement speed of `5.0f * GetFrameTime()` to `player.position` for each pressed key
-- [ ] 2.6 Add boundary clamping in `player_update()` after movement: clamp `player.position.x` to `[-9.0f, 9.0f]` and `player.position.z` to `[-9.0f, 9.0f]` so the player cannot walk off the edge of the 20x20 ground plane
-- [ ] 2.7 In `main.cpp`, after calling `player_update()` each frame, update `camera.target` to `player.position` and set `camera.position` to `{player.position.x, player.position.y + 20.0f, player.position.z + 10.0f}` so the camera always follows the player with the same tilt angle
-- [ ] 2.8 Wire everything into `main.cpp`: call `player_init()` before the loop, call `player_update()` and `player_draw()` inside the loop; confirm the character appears, moves with WASD, cannot leave the level boundary, and the camera tracks the player
+- [x] 2.1 Create `include/player.h` and define a `Player` struct with fields: `Vector3 position`, `Vector3 velocity`, `Vector3 size`, `bool is_grounded`; also declare three functions: `Player player_init()`, `void player_update(Player& player)`, `void player_draw(const Player& player)` (note: DrawCubeTexture removed in Raylib 5 — uses DrawCubeV with color instead)
+- [x] 2.2 Create `src/player.cpp`; implement `player_init()` to return a `Player` with position `{0, 0.5f, 0}` (half-height above ground), size `{0.8f, 1.0f, 0.8f}`, zero velocity, and `is_grounded = false`
+- [x] 2.3 Procedural player texture generated in `src/textures.cpp` (kept for ground; player uses BLUE color via DrawCubeV — Raylib 5 removed DrawCubeTexture)
+- [x] 2.4 Implement `player_draw()` in `src/player.cpp` using `DrawCubeV` (BLUE) + `DrawCubeWiresV` (DARKBLUE)
+- [x] 2.5 Implement keyboard input in `player_update()`: WASD + arrow keys, movement speed `5.0f * GetFrameTime()`
+- [x] 2.6 Add boundary clamping in `player_update()`: clamp X/Z to `[-9.0f, 9.0f]`
+- [x] 2.7 Camera follow in `main.cpp`: `camera.target = player.position`, `camera.position = {px, py+20, pz+10}`
+- [x] 2.8 Wire player into `main.cpp` game loop; character renders, moves with WASD/arrows, boundary clamp works, camera tracks
 
 ---
 
