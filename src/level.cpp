@@ -54,15 +54,20 @@ bool check_platform_collision(Player& player, const Platform platforms[], int co
         // Player bottom edge
         float player_bottom = player.position.y - player.size.y * 0.5f;
 
-        // Landing: player is falling onto the platform top surface
+        // Landing: player falling onto the platform top surface.
+        // Lower bound accounts for one frame of overshoot at max slam speed (16/60 ≈ 0.27).
         if (player.velocity.y <= 0.0f &&
             player_bottom <= plat_top + 0.15f &&
-            player_bottom >= plat_top - 0.4f) {
+            player_bottom >= plat_top - 0.5f) {
 
-            player.position.y  = plat_top + player.size.y * 0.5f;
-            player.velocity.y  = 0.0f;
-            player.is_grounded = true;
+            player.position.y      = plat_top + player.size.y * 0.5f;
+            player.velocity.y      = 0.0f;
+            player.is_grounded     = true;
+            player.jumps_remaining = 2;
+            player.air_dash_used   = false;
+            player.is_slamming     = false;
             on_platform = true;
+            break;  // stop after first hit to prevent cascade-snapping through stacked windows
         }
     }
 
