@@ -33,6 +33,13 @@ TEST_CASE("nearest_enemy returns -1 when all enemies are dead") {
     REQUIRE(nearest_enemy(enemies, 2, origin, 10.0f) == -1);
 }
 
+TEST_CASE("attack damage: ATTACK_DAMAGE reduces enemy health when applied") {
+    Enemy e = make_enemy(1.0f, 0.0f, true);
+    float new_health = e.health - ATTACK_DAMAGE;
+    REQUIRE(new_health < e.health);
+    REQUIRE(new_health == Catch::Approx(e.health - ATTACK_DAMAGE));
+}
+
 TEST_CASE("slam radius math: enemy inside SLAM_RADIUS is within range") {
     float r2 = SLAM_RADIUS * SLAM_RADIUS;
     float dx = 1.0f, dz = 0.0f;   // distance = 1.0, within 2.5

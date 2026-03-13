@@ -39,11 +39,11 @@
 
 #### 1.0 Tasks
 
-- [ ] 1.1 Create `include/combat.h` — declare `nearest_enemy(const Enemy[], int, Vector3, float)` and move all eight constants from `main.cpp` into this header: `ATTACK_RANGE`, `ATTACK_DAMAGE`, `ATTACK_COOLDOWN`, `ATTACK_DURATION`, `HURT_FLASH_TIME`, `SLAM_DAMAGE`, `SLAM_RADIUS`, `SHOCKWAVE_DURATION`; include `<raylib.h>` and `"enemy.h"` at the top
-- [ ] 1.2 Create `src/combat.cpp` — `#include "combat.h"` and `#include <cmath>`, then paste in the `nearest_enemy` function body (removing its `static` keyword)
-- [ ] 1.3 Update `src/main.cpp` — delete the eight `static const float` constants and the `nearest_enemy` function body; add `#include "combat.h"` below the existing includes
-- [ ] 1.4 Run `make` and confirm it compiles cleanly with zero errors or warnings related to the refactor
-- [ ] 1.5 Run `make web` and confirm it compiles cleanly
+- [x] 1.1 Create `include/combat.h` — declare `nearest_enemy(const Enemy[], int, Vector3, float)` and move all eight constants from `main.cpp` into this header: `ATTACK_RANGE`, `ATTACK_DAMAGE`, `ATTACK_COOLDOWN`, `ATTACK_DURATION`, `HURT_FLASH_TIME`, `SLAM_DAMAGE`, `SLAM_RADIUS`, `SHOCKWAVE_DURATION`; include `<raylib.h>` and `"enemy.h"` at the top
+- [x] 1.2 Create `src/combat.cpp` — `#include "combat.h"` and `#include <cmath>`, then paste in the `nearest_enemy` function body (removing its `static` keyword)
+- [x] 1.3 Update `src/main.cpp` — delete the eight `static const float` constants and the `nearest_enemy` function body; add `#include "combat.h"` below the existing includes
+- [x] 1.4 Run `make` and confirm it compiles cleanly with zero errors or warnings related to the refactor
+- [x] 1.5 Run `make web` and confirm it compiles cleanly
 
 ---
 
@@ -56,31 +56,31 @@
 
 #### 2.0 Tasks
 
-- [ ] 2.1 Move `BOUNDARY_MIN` and `BOUNDARY_MAX` from `static const` inside `src/player.cpp` to `include/player.h` (as `inline constexpr float`) so tests can reference them without linking `player.cpp`
-- [ ] 2.2 Create `tests/unit/catch2/` directory; download the Catch2 v3 amalgamated release from `https://github.com/catchorg/Catch2/releases` and place `catch_amalgamated.hpp` and `catch_amalgamated.cpp` inside it
-- [ ] 2.3 Add the `test-unit` target to `Makefile`:
+- [x] 2.1 Move `BOUNDARY_MIN` and `BOUNDARY_MAX` from `static const` inside `src/player.cpp` to `include/player.h` (as `inline constexpr float`) so tests can reference them without linking `player.cpp`
+- [x] 2.2 Create `tests/unit/catch2/` directory; download the Catch2 v3 amalgamated release from `https://github.com/catchorg/Catch2/releases` and place `catch_amalgamated.hpp` and `catch_amalgamated.cpp` inside it
+- [x] 2.3 Add the `test-unit` target to `Makefile`:
   - Compile `tests/unit/catch2/catch_amalgamated.cpp` and all `tests/unit/test_*.cpp` files
   - Link against `build/combat.o`, `build/item.o`, `build/level.o` (pre-built from the normal build) plus Raylib (`$(LDFLAGS)`)
   - Output binary to `build/test-runner`; run it immediately after linking
   - Example target shape: `make test-unit` depends on `all` (so object files exist), then compiles and runs `build/test-runner`
-- [ ] 2.4 Add `build/test-runner` to `.gitignore`
-- [ ] 2.5 Write `tests/unit/test_item.cpp` — include `"item.h"` and `catch_amalgamated.hpp`; write three `TEST_CASE` blocks:
+- [x] 2.4 Add `build/test-runner` to `.gitignore`
+- [x] 2.5 Write `tests/unit/test_item.cpp` — include `"item.h"` and `catch_amalgamated.hpp`; write three `TEST_CASE` blocks:
   - Player within radius → `item_in_pickup_range` returns `true`
   - Player outside radius → returns `false`
   - Item already collected → returns `false` regardless of position
-- [ ] 2.6 Write `tests/unit/test_collision.cpp` — include `"level.h"` and `"player.h"`; write three `TEST_CASE` blocks:
+- [x] 2.6 Write `tests/unit/test_collision.cpp` — include `"level.h"` and `"player.h"`; write three `TEST_CASE` blocks:
   - Player falling onto platform top → `check_platform_collision` returns `true`, `player.is_grounded` becomes `true`, `player.position.y` snaps to platform top + half player height
   - Player beside platform (no XZ overlap) → returns `false`, position unchanged
   - Player below platform (already past it) → returns `false`
-- [ ] 2.7 Write `tests/unit/test_combat.cpp` — include `"combat.h"` and `"enemy.h"`; write four `TEST_CASE` blocks:
+- [x] 2.7 Write `tests/unit/test_combat.cpp` — include `"combat.h"` and `"enemy.h"`; write four `TEST_CASE` blocks:
   - Single alive enemy within range → `nearest_enemy` returns index `0`
   - Two enemies, closer one is index 1 → returns `1`
   - All enemies dead → returns `-1`
   - Slam AoE: enemy within `SLAM_RADIUS` → health reduced by `SLAM_DAMAGE`; enemy outside radius → health unchanged (test the math directly, not via game loop)
-- [ ] 2.8 Write `tests/unit/test_player.cpp` — include `"player.h"` and `<algorithm>`; write two `TEST_CASE` blocks using `std::clamp` with `BOUNDARY_MIN`/`BOUNDARY_MAX`:
+- [x] 2.8 Write `tests/unit/test_player.cpp` — include `"player.h"` and `<algorithm>`; write two `TEST_CASE` blocks using `std::clamp` with `BOUNDARY_MIN`/`BOUNDARY_MAX`:
   - Position at `BOUNDARY_MAX + 1.0f` clamped → equals `BOUNDARY_MAX`
   - Position at `BOUNDARY_MIN - 1.0f` clamped → equals `BOUNDARY_MIN`
-- [ ] 2.9 Run `make test-unit` and fix any compile errors; confirm all test cases pass and the binary exits without opening a window
+- [x] 2.9 Run `make test-unit` and fix any compile errors; confirm all test cases pass and the binary exits without opening a window
 
 ---
 
@@ -121,14 +121,27 @@
 
 #### 4.0 Tasks
 
-- [x] 4.1 Add a `test` job to `.github/workflows/web-deploy.yml` **before** `build-and-deploy`, with this shape:
+- [x] 4.1 Add a `test` job to `.github/workflows/web-deploy.yml` **before** `build-and-deploy`. Note: `libraylib-dev` is unavailable on Ubuntu 24.04, so the job installs build dependencies (cmake, libglfw3-dev, etc.) via apt and builds Raylib 5.5 from source with CMake, cached via `actions/cache@v4`. Final shape:
   ```yaml
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Raylib (for linking test binary)
-        run: sudo apt-get update && sudo apt-get install -y libraylib-dev
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake libglfw3-dev libgl-dev libx11-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev
+      - name: Cache Raylib native build
+        id: cache-raylib-native
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/lib/libraylib.a
+          key: raylib-5.5-native-ubuntu
+      - name: Build and install Raylib 5.5 (native)
+        if: steps.cache-raylib-native.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git /tmp/raylib-src
+          cmake -S /tmp/raylib-src -B /tmp/raylib-build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+          cmake --build /tmp/raylib-build --parallel $(nproc)
+          sudo cmake --install /tmp/raylib-build
       - name: Build game objects
         run: make all
       - name: Run unit tests

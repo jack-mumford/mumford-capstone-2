@@ -1,5 +1,6 @@
 build/
 raylib-src/
+test-results/
 tests/e2e/node_modules/
 tests/e2e/test-results/
 tests/e2e/screenshots/
