@@ -52,11 +52,35 @@ Randomness seeded to: 272638616
 All tests passed (18 assertions in 14 test cases)
 ```
 
-## GitHub Actions
+## GitHub Actions Run — `https://github.com/jack-mumford/mumford-capstone-2/actions`
 
-After pushing master, the Actions run at `https://github.com/jack-mumford/mumford-capstone-2/actions` shows:
-- `test` job runs `make test-unit` on `ubuntu-latest`
-- `build-and-deploy` job shows `needs: [test]` in the workflow graph — deployment is blocked if tests fail
+Run 23072373469 (`fix: build Raylib 5.5 from source in CI`):
+
+```
+✓ test in 1m9s
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Install build dependencies
+  ✓ Cache Raylib native build
+  ✓ Build and install Raylib 5.5 (native)
+  ✓ Build game objects
+  ✓ Run unit tests
+  ✓ Post Cache Raylib native build
+  ✓ Complete job
+
+✓ build-and-deploy in 54s
+  ✓ Set up job
+  ✓ Checkout
+  ✓ Set up Emscripten
+  ✓ Cache Raylib web build
+  - Build Raylib for WebAssembly (skipped — cache hit)
+  ✓ Build web
+  ✓ Upload Pages artifact
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+```
+
+Both jobs green. `build-and-deploy` waited for `test` to complete before starting, confirming the dependency gate is active.
 
 ## Verification
 
