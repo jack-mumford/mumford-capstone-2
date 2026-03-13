@@ -60,10 +60,10 @@ test-unit: all
 test-e2e:
 	@command -v node >/dev/null 2>&1 || { echo "Error: Node.js is required for E2E tests. Install from https://nodejs.org"; exit 1; }
 	@command -v npm  >/dev/null 2>&1 || { echo "Error: Node.js is required for E2E tests. Install from https://nodejs.org"; exit 1; }
-	cd tests/e2e && npm install && npx playwright install chromium && \
-	  python3 -m http.server 8080 --directory ../../build/web & \
+	cd tests/e2e && npm install && ./node_modules/.bin/playwright install chromium
+	python3 -m http.server 8080 --directory build/web & \
 	  SERVER_PID=$$!; sleep 2; \
-	  npx playwright test; TEST_EXIT=$$?; \
+	  cd tests/e2e && ./node_modules/.bin/playwright test; TEST_EXIT=$$?; \
 	  kill $$SERVER_PID 2>/dev/null; exit $$TEST_EXIT
 
 clean:
