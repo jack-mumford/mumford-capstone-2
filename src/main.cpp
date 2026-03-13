@@ -4,6 +4,7 @@
 #include "player.h"
 #include "level.h"
 #include "enemy.h"
+#include "combat.h"
 
 #ifdef PLATFORM_WEB
 #include <emscripten/emscripten.h>
@@ -15,29 +16,6 @@ static EM_BOOL on_web_resize(int /*event_type*/, const EmscriptenUiEvent* e, voi
 }
 #endif
 
-static const float ATTACK_RANGE    = 2.2f;
-static const float ATTACK_DAMAGE   = 25.0f;
-static const float ATTACK_COOLDOWN = 0.45f;
-static const float ATTACK_DURATION = 0.25f;
-static const float HURT_FLASH_TIME = 0.15f;
-
-static const float SLAM_DAMAGE        = 40.0f;
-static const float SLAM_RADIUS        = 2.5f;
-static const float SHOCKWAVE_DURATION = 0.35f;
-
-// Returns index of nearest alive enemy within range, or -1
-static int nearest_enemy(const Enemy enemies[], int count, Vector3 origin, float range) {
-    int   best   = -1;
-    float best_d = range * range;
-    for (int i = 0; i < count; i++) {
-        if (!enemies[i].is_alive) continue;
-        float dx = enemies[i].position.x - origin.x;
-        float dz = enemies[i].position.z - origin.z;
-        float d2 = dx*dx + dz*dz;
-        if (d2 < best_d) { best_d = d2; best = i; }
-    }
-    return best;
-}
 
 // ---- Game state (file-scope so emscripten loop callback can access it) ------
 struct GameState {
