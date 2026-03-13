@@ -34,7 +34,8 @@ jobs:
         id: cache-raylib-web
         uses: actions/cache@v4
         with:
-          path: raylib-web
+          # Only cache the compiled library — never overwrite committed repo files
+          path: raylib-web/libraylib.a
           key: raylib-5.5-web-emsdk-3.1.64
 
       - name: Build Raylib for WebAssembly
@@ -44,7 +45,7 @@ jobs:
           cd raylib-src/src
           make PLATFORM=PLATFORM_WEB -B
           mkdir -p ../../raylib-web
-          cp libraylib.a raylib.h raymath.h minshell.html ../../raylib-web/
+          cp libraylib.a raylib.h raymath.h ../../raylib-web/
 
       - name: Build web
         run: make web
