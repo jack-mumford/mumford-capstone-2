@@ -20,8 +20,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Raylib (for compiling and linking test binary)
-        run: sudo apt-get update && sudo apt-get install -y libraylib-dev
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libglfw3-dev libgl-dev \
+            libx11-dev libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev
+
+      - name: Cache Raylib native build
+        id: cache-raylib-native
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/lib/libraylib.a
+          key: raylib-5.5-native-ubuntu
+
+      - name: Build and install Raylib 5.5 (native)
+        if: steps.cache-raylib-native.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch 5.5 https://github.com/raysan5/raylib.git /tmp/raylib-src
+          cmake -S /tmp/raylib-src -B /tmp/raylib-build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+          cmake --build /tmp/raylib-build --parallel $(nproc)
+          sudo cmake --install /tmp/raylib-build
 
       - name: Build game objects
         run: make all
