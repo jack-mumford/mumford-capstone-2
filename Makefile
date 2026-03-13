@@ -1,6 +1,13 @@
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra $(shell pkg-config --cflags raylib)
-LDFLAGS  := $(shell pkg-config --libs raylib) -framework IOKit -framework Cocoa -framework OpenGL
+
+UNAME_S  := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  PLATFORM_LDFLAGS := -framework IOKit -framework Cocoa -framework OpenGL
+else
+  PLATFORM_LDFLAGS :=
+endif
+LDFLAGS  := $(shell pkg-config --libs raylib) $(PLATFORM_LDFLAGS)
 
 SRC_DIR   := src
 BUILD_DIR := build

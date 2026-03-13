@@ -15,7 +15,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Raylib (for compiling and linking test binary)
+        run: sudo apt-get update && sudo apt-get install -y libraylib-dev
+
+      - name: Build game objects
+        run: make all
+
+      - name: Run unit tests
+        run: make test-unit
+
   build-and-deploy:
+    needs: [test]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -58,3 +73,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        

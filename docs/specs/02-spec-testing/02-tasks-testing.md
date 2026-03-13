@@ -112,7 +112,7 @@
 
 ---
 
-### [ ] 4.0 Add unit test CI job to GitHub Actions
+### [x] 4.0 Add unit test CI job to GitHub Actions
 
 #### 4.0 Proof Artifact(s)
 
@@ -121,7 +121,7 @@
 
 #### 4.0 Tasks
 
-- [ ] 4.1 Add a `test` job to `.github/workflows/web-deploy.yml` **before** `build-and-deploy`, with this shape:
+- [x] 4.1 Add a `test` job to `.github/workflows/web-deploy.yml` **before** `build-and-deploy`, with this shape:
   ```yaml
   test:
     runs-on: ubuntu-latest
@@ -134,6 +134,6 @@
       - name: Run unit tests
         run: make test-unit
   ```
-- [ ] 4.2 Add `needs: [test]` to the `build-and-deploy` job so it cannot start until `test` passes
-- [ ] 4.3 Update `.PHONY` in the Makefile to include `test-unit` and `test-e2e`
-- [ ] 4.4 Commit all changes (`combat.h`/`.cpp`, test files, Makefile, `.gitignore`, workflow) and push to `master`; watch the Actions run and confirm both `test` and `build-and-deploy` jobs go green
+- [x] 4.2 Add `needs: [test]` to the `build-and-deploy` job so it cannot start until `test` passes
+- [x] 4.3 Update `.PHONY` in the Makefile to include `test-unit` and `test-e2e`
+- [x] 4.4 Commit all changes (`combat.h`/`.cpp`, test files, Makefile, `.gitignore`, workflow) and push to `master`; watch the Actions run and confirm both `test` and `build-and-deploy` jobs go green
