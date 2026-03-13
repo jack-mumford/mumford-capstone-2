@@ -9,8 +9,7 @@ static const float SPRINT_SPEED  = 10.0f;
 static const float DASH_SPEED    = 22.0f;
 static const float DASH_DURATION =  0.18f;
 static const float DASH_COOLDOWN =  0.55f;
-static const float BOUNDARY_MIN  = -9.0f;
-static const float BOUNDARY_MAX  =  9.0f;
+
 static const float GROUND_Y      =  0.5f;
 
 Player player_init() {

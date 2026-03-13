@@ -4,6 +4,9 @@
 static const float JUMP_VELOCITY = 8.0f;
 static const float GRAVITY       = -20.0f;
 
+inline constexpr float BOUNDARY_MIN = -9.0f;
+inline constexpr float BOUNDARY_MAX =  9.0f;
+
 struct Player {
     Vector3 position;
     Vector3 velocity;

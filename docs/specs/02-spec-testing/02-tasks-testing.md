@@ -47,7 +47,7 @@
 
 ---
 
-### [ ] 2.0 Set up Catch2 unit test harness and write all unit tests
+### [x] 2.0 Set up Catch2 unit test harness and write all unit tests
 
 #### 2.0 Proof Artifact(s)
 

@@ -1,2 +1,6 @@
 build/
 raylib-src/
+tests/e2e/node_modules/
+tests/e2e/test-results/
+tests/e2e/screenshots/
+tests/e2e/.playwright/

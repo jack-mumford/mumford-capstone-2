@@ -22,7 +22,13 @@ WEB_FLAGS    := -std=c++17 -DPLATFORM_WEB \
                 -s FORCE_FILESYSTEM=1 \
                 -O2
 
-.PHONY: all web clean
+# Unit tests (Catch2)
+TEST_CATCH2    := tests/unit/catch2/catch_amalgamated.cpp
+TEST_SRCS      := $(wildcard tests/unit/test_*.cpp)
+TEST_GAME_OBJS := build/combat.o build/item.o build/level.o
+TEST_RUNNER    := build/test-runner
+
+.PHONY: all web clean test-unit test-e2e
 
 all: $(TARGET)
 
@@ -43,6 +49,22 @@ web: $(WEB_DIR)
 
 $(WEB_DIR):
 	mkdir -p $(WEB_DIR)
+
+test-unit: all
+	$(CXX) -std=c++17 $(shell pkg-config --cflags raylib) -Iinclude -Itests/unit/catch2 \
+		$(TEST_CATCH2) $(TEST_SRCS) \
+		$(TEST_GAME_OBJS) \
+		-o $(TEST_RUNNER) $(LDFLAGS)
+	./$(TEST_RUNNER)
+
+test-e2e:
+	@command -v node >/dev/null 2>&1 || { echo "Error: Node.js is required for E2E tests. Install from https://nodejs.org"; exit 1; }
+	@command -v npm  >/dev/null 2>&1 || { echo "Error: Node.js is required for E2E tests. Install from https://nodejs.org"; exit 1; }
+	cd tests/e2e && npm install && npx playwright install chromium && \
+	  python3 -m http.server 8080 --directory ../../build/web & \
+	  SERVER_PID=$$!; sleep 2; \
+	  npx playwright test; TEST_EXIT=$$?; \
+	  kill $$SERVER_PID 2>/dev/null; exit $$TEST_EXIT
 
 clean:
 	rm -rf $(BUILD_DIR)
