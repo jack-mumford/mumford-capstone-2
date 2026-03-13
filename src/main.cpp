@@ -7,6 +7,12 @@
 
 #ifdef PLATFORM_WEB
 #include <emscripten/emscripten.h>
+#include <emscripten/html5.h>
+
+static EM_BOOL on_web_resize(int /*event_type*/, const EmscriptenUiEvent* e, void* /*user*/) {
+    SetWindowSize((int)e->windowInnerWidth, (int)e->windowInnerHeight);
+    return EM_TRUE;
+}
 #endif
 
 static const float ATTACK_RANGE    = 2.2f;
@@ -216,7 +222,11 @@ static void UpdateDrawFrame() {
 // ---- Main ------------------------------------------------------------------
 int main() {
 #ifdef PLATFORM_WEB
-    InitWindow(960, 540, "4D Pixel Game");
+    // Start at full browser window size; resize callback keeps it in sync
+    int init_w = EM_ASM_INT(return window.innerWidth;);
+    int init_h = EM_ASM_INT(return window.innerHeight;);
+    InitWindow(init_w, init_h, "4D Pixel Game");
+    emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, nullptr, true, on_web_resize);
 #else
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
     InitWindow(0, 0, "4D Pixel Game");
